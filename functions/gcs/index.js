@@ -205,11 +205,11 @@ function mapValueWithRecommendation(data, cdcRecoArray) {
 exports.cdcRecommendation = (event, googleCb) => {
   // const file = event.data;
 
-  // if (file.resourceState === 'not_exists') {
-  //   // This is a file deletion event, so skip it
-  //   callback();
-  //   return;
-  // }
+  if (file.resourceState === 'not_exists') {
+    // This is a file deletion event, so skip it
+    callback();
+    return;
+  }
   let testFile = {
     bucket: 'healthapp',
     name: 'member_fitness_tracker_history.csv'
