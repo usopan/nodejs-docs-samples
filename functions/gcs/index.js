@@ -189,7 +189,7 @@ function mapValueWithRecommendation(data, cdcRecoArray, cb, file) {
     let tableId = 'Member_' + key;
     insertRowsAsStream(tableId, value, cb);
   });
-  stotrage.bucket(file.bucket).file(file.name).delete();
+  storage.bucket(file.bucket).file(file.name).delete();
   cb(null, "DOne");
 
   return result;
