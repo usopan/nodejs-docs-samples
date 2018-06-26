@@ -94,36 +94,37 @@ function createTable(tableId) {
 }
 function insertRowsAsStream(tableId, rows, cb) {
 
-  createTable(tableId).then(function () {
-    const bigquery = new BigQuery({
-      projectId: projectId,
-    });
-
-    // Inserts data into a table
-    bigquery
-      .dataset(datasetId)
-      .table(tableId)
-      .insert(rows)
-      .then(() => {
-        console.log(`Inserted ${rows.length} rows`);
-
-
-      })
-      .catch(err => {
-        if (err && err.name === 'PartialFailureError') {
-          if (err.errors && err.errors.length > 0) {
-            console.log('Insert errors:');
-            err.errors.forEach(err => console.error(err));
-          }
-        } else {
-          console.error('ERROR:', err);
-          cb(err, "error");
-        }
+  return new Promise(function (resolve, reject) {
+    createTable(tableId).then(function () {
+      const bigquery = new BigQuery({
+        projectId: projectId,
       });
-  }).catch(function (error) {
-    cb(error, "error");
-  })
 
+      // Inserts data into a table
+      bigquery
+        .dataset(datasetId)
+        .table(tableId)
+        .insert(rows)
+        .then(() => {
+          console.log(`Inserted ${rows.length} rows`);
+          resolve();
+
+        })
+        .catch(err => {
+          if (err && err.name === 'PartialFailureError') {
+            if (err.errors && err.errors.length > 0) {
+              console.log('Insert errors:');
+              err.errors.forEach(err => console.error(err));
+            }
+          } else {
+            console.error('ERROR:', err);
+            reject(err, "error");
+          }
+        });
+    }).catch(function (error) {
+      reject(error, "error");
+    })
+  });
   // [END bigquery_table_insert_rows]
 }
 
@@ -185,12 +186,15 @@ function mapValueWithRecommendation(data, cdcRecoArray, cb, file) {
     // console.log(finalRecord);
     return finalRecord;
   });
-  let groupedRows = _.chain(result).groupBy('Member_ID').map(function (value, key) {
+  let groupedRowsPromises = _.chain(result).groupBy('Member_ID').map(function (value, key) {
     let tableId = 'Member_' + key;
-    insertRowsAsStream(tableId, value, cb);
+    return insertRowsAsStream(tableId, value, cb);
   });
-  storage.bucket(file.bucket).file(file.name).delete();
-  cb(null, "DOne");
+  Promise.all(groupedRowsPromises).then(function () {
+    storage.bucket(file.bucket).file(file.name).delete();
+    cb(null, "DOne");
+  });
+
 
   return result;
 }
