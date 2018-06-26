@@ -92,7 +92,7 @@ function createTable(tableId) {
       })
   })
 }
-function insertRowsAsStream(tableId, rows, cb, event) {
+function insertRowsAsStream(tableId, rows, cb) {
 
   createTable(tableId).then(function () {
     const bigquery = new BigQuery({
@@ -158,7 +158,7 @@ function getCDCCalorieRequirements() {
   });
 }
 
-function mapValueWithRecommendation(data, cdcRecoArray, cb, event) {
+function mapValueWithRecommendation(data, cdcRecoArray, cb, file) {
   let sleepRecommendations = cdcRecoArray[1];
   let calorieRecommendations = cdcRecoArray[0];
   let sleepReco = null;
@@ -189,7 +189,7 @@ function mapValueWithRecommendation(data, cdcRecoArray, cb, event) {
     let tableId = 'Member_' + key;
     insertRowsAsStream(tableId, value, cb);
   });
-  stotrage.bucket(event.data.bucket).file(event.data.name).delete();
+  stotrage.bucket(file.bucket).file(file.name).delete();
   cb(null, "DOne");
 
   return result;
@@ -208,7 +208,7 @@ function mapValueWithRecommendation(data, cdcRecoArray, cb, event) {
  * @param {function} callback The callback function.
  */
 exports.cdcRecommendation = (event, cb) => {
-  // const file = event.data;
+  const file = event.data;
 
   if (file.resourceState === 'not_exists') {
     // This is a file deletion event, so skip it
@@ -219,13 +219,13 @@ exports.cdcRecommendation = (event, cb) => {
     bucket: 'healthapp',
     name: 'member_fitness_tracker_history.csv'
   }
-  let uploadFile = getFileStream(event.data);
+  let uploadFile = getFileStream(file);
   let lookupPromise = Promise.all([getCDCCalorieRequirements(), getCDCSleepRequirements()]);
   console.log(event);
   lookupPromise.then(function (resultArray) {
     let parser = parse({ columns: true, cast: true }, function (err, data) {
       // console.log(data);
-      let result = mapValueWithRecommendation(data, resultArray, cb, event);
+      let result = mapValueWithRecommendation(data, resultArray, cb, file);
 
 
     });
