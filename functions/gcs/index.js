@@ -186,9 +186,11 @@ function mapValueWithRecommendation(data, cdcRecoArray, cb, file) {
     // console.log(finalRecord);
     return finalRecord;
   });
-  let groupedRowsPromises = _.chain(result).groupBy('Member_ID').map(function (value, key) {
+  let groupedRowsPromises = [];
+  _.chain(result).groupBy('Member_ID').map(function (value, key) {
     let tableId = 'Member_' + key;
-    return insertRowsAsStream(tableId, value, cb);
+    let rowPromise = insertRowsAsStream(tableId, value, cb);
+    groupedRowsPromises.push(rowPromise);
   });
   Promise.all(groupedRowsPromises).then(function () {
     storage.bucket(file.bucket).file(file.name).delete();
