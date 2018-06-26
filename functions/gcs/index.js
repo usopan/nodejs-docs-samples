@@ -92,7 +92,7 @@ function createTable(tableId) {
       })
   })
 }
-function insertRowsAsStream(tableId, rows) {
+function insertRowsAsStream(tableId, rows, cb, event) {
 
   createTable(tableId).then(function () {
     const bigquery = new BigQuery({
@@ -106,7 +106,8 @@ function insertRowsAsStream(tableId, rows) {
       .insert(rows)
       .then(() => {
         console.log(`Inserted ${rows.length} rows`);
-        // cb(null, "done");
+
+
       })
       .catch(err => {
         if (err && err.name === 'PartialFailureError') {
@@ -116,9 +117,11 @@ function insertRowsAsStream(tableId, rows) {
           }
         } else {
           console.error('ERROR:', err);
-          // cb(err, "error");
+          cb(err, "error");
         }
       });
+  }).catch(function (error) {
+    cb(error, "error");
   })
 
   // [END bigquery_table_insert_rows]
@@ -155,7 +158,7 @@ function getCDCCalorieRequirements() {
   });
 }
 
-function mapValueWithRecommendation(data, cdcRecoArray) {
+function mapValueWithRecommendation(data, cdcRecoArray, cb, event) {
   let sleepRecommendations = cdcRecoArray[1];
   let calorieRecommendations = cdcRecoArray[0];
   let sleepReco = null;
@@ -184,8 +187,10 @@ function mapValueWithRecommendation(data, cdcRecoArray) {
   });
   let groupedRows = _.chain(result).groupBy('Member_ID').map(function (value, key) {
     let tableId = 'Member_' + key;
-    insertRowsAsStream(tableId, value);
+    insertRowsAsStream(tableId, value, cb);
   });
+  stotrage.bucket(event.data.bucket).file(event.data.name).delete();
+  cb(null, "DOne");
 
   return result;
 }
@@ -202,7 +207,7 @@ function mapValueWithRecommendation(data, cdcRecoArray) {
  * @param {string} event.data.name Name of a file in the Cloud Storage bucket.
  * @param {function} callback The callback function.
  */
-exports.cdcRecommendation = (event, googleCb) => {
+exports.cdcRecommendation = (event, cb) => {
   // const file = event.data;
 
   if (file.resourceState === 'not_exists') {
@@ -220,13 +225,14 @@ exports.cdcRecommendation = (event, googleCb) => {
   lookupPromise.then(function (resultArray) {
     let parser = parse({ columns: true, cast: true }, function (err, data) {
       // console.log(data);
-      googleCb(null, mapValueWithRecommendation(data, resultArray));
-      stotrage.bucket(event.data.bucket).file(event.data.name).delete();
+      let result = mapValueWithRecommendation(data, resultArray, cb, event);
+
+
     });
     uploadFile.pipe(parser);
 
   }).catch(function (error) {
-    googleCb(error, 'error');
+    cb(error, 'error');
     // throw new Error(error);
   });
 };
