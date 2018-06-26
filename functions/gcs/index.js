@@ -53,22 +53,21 @@ function createTable(tableId) {
         const result = exists[0];
         if (!result) {
           let schema = {
-            Member_ID: 'integer',
-            First_Name: 'string',
-            Last_Name: 'string',
-            Gender: 'string',
-            Age: 'integer',
-            Height: 'float',
-            Weight: 'integer',
-            Hours_Sleep: 'integer',
-            Calories_Consumed: 'integer',
-            Exercise_Calories_Burned: 'integer',
-            Date: 'Date',
-            recommended_Min_Sleep: 'integer',
-            recommended_Max_Sleep: 'integer',
-            recommendedSedentaryCalories: 'integer',
-            recommendedModerateCalories: 'integer',
-            recommendedActiveCalories: 'integer'
+            fields: [{ name: 'Member_ID', type: 'integer' },
+            { name: 'First_Name', type: 'string' },
+            { name: 'Last_Name', type: 'string' },
+            { name: 'Gender', type: 'string' },
+            { name: 'Age', type: 'integer' },
+            { name: 'Height', type: 'float' },
+            { name: 'Weight', type: 'integer' },
+            { name: 'Hours_Sleep', type: 'integer' },
+            { name: 'Calories_Consumed', type: 'integer' },
+            { name: 'Exercise_Calories_Burned', type: 'integer' },
+            { name: 'Date', type: 'Date' }, { name: 'recommended_Min_Sleep', type: 'integer' },
+            { name: 'recommended_Max_Sleep', type: 'integer' },
+            { name: 'recommendedSedentaryCalories', type: 'integer' },
+            { name: 'recommendedModerateCalories', type: 'integer' },
+            { name: 'recommendedActiveCalories', type: 'integer' }]
           }
           // For all options, see https://cloud.google.com/bigquery/docs/reference/v2/tables#resource
           const options = {
