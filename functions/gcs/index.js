@@ -134,6 +134,7 @@ function insertRowsAsStream(tableId, rows, cb) {
 
 function getCDCSleepRequirements() {
   return new Promise(function (resolve, reject) {
+    var start = process.hrtime();
     let sleep = storage.bucket('healthapp').file('cdc_sleep_hours_lookup.csv').createReadStream();
     // let options = {
     //   input: sleep
@@ -141,15 +142,22 @@ function getCDCSleepRequirements() {
     let sleepRecommendations = [];
     let parser = parse({ columns: true, cast: true }, function (err, data) {
       // console.log(data);
+      elapsed_time("Sleep file processed")
       resolve(data);
     });
     sleep.pipe(parser);
 
   });
 }
-
+function elapsed_time(note) {
+  var precision = 3; // 3 decimal places
+  var elapsed = process.hrtime(start)[1] / 1000000; // divide by a million to get nano to milli
+  console.log(process.hrtime(start)[0] + " s, " + elapsed.toFixed(precision) + " ms - " + note); // print message + time
+  start = process.hrtime(); // reset the timer
+}
 function getCDCCalorieRequirements() {
   return new Promise(function (resolve, reject) {
+    var start = process.hrtime();
     let calrories = storage.bucket('healthapp').file('cdc_calorie_needs_lookup.csv').createReadStream();
     // let options = {
     //   input: sleep
@@ -157,6 +165,7 @@ function getCDCCalorieRequirements() {
     let calorieRecommendations = [];
     let parser = parse({ columns: true, cast: true }, function (err, data) {
       // console.log(data);
+      elapsed_time("Calory file processed")
       resolve(data);
     });
     calrories.pipe(parser);

@@ -17,6 +17,16 @@ env: flex
 
 # [START env]
 env_variables:
-  GCLOUD_STORAGE_BUCKET: YOUR_BUCKET_NAME
+  GCLOUD_STORAGE_BUCKET: healthapp
+resources:
+  cpu: 0.5
+  memory_gb: 1
+  disk_size_gb: 10
+automatic_scaling:
+  min_num_instances: 1
+  max_num_instances: 16
+  cool_down_period_sec: 180
+  cpu_utilization:
+    target_utilization: 0.6
 # [END env]
 # [END app_yaml]
