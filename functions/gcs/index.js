@@ -26,7 +26,7 @@ const BigQuery = require('@google-cloud/bigquery');
 const projectId = 'secure-unison-207809';
 const datasetId = 'healthdata';
 const _ = require('underscore');
-
+const moment = require('moment');
 function getFileStream(file) {
   if (!file.bucket) {
     throw new Error('Bucket not provided. Make sure you have a "bucket" property in your request');
@@ -101,7 +101,7 @@ function insertRowsAsStream(tableId, rows, cb) {
       });
       let transformedRows = rows.map(row => {
         row.Height = row.Height.replace(',', '.');
-        row.Date = row.Date.replace(/[/]/g, '-');
+        row.Date = moment(row.Date, "MM/DD/YYYY").format("YYYY-MM-DD")
         return row;
       })
       // Inserts data into a table
