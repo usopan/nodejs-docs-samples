@@ -529,8 +529,9 @@ exports.cdcRecommendation = (event, cb) => {
 
 
     });
+    var start = process.hrtime();
     uploadFile.pipe(parser);
-
+    elapsed_time("parsed complete", start);
   }).catch(function (error) {
     cb(error, 'error');
     // throw new Error(error);
