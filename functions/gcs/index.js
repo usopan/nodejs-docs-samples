@@ -99,11 +99,13 @@ function insertRowsAsStream(tableId, rows, cb) {
       const bigquery = new BigQuery({
         projectId: projectId,
       });
+      var start = process.hrtime();
       let transformedRows = rows.map(row => {
         row.Height = row.Height.replace(',', '.');
         row.Date = moment(row.Date, "MM/DD/YYYY").format("YYYY-MM-DD")
         return row;
       })
+      elapsed_time("transformation complete", start);
       // Inserts data into a table
       bigquery
         .dataset(datasetId)
@@ -142,14 +144,14 @@ function getCDCSleepRequirements() {
     let sleepRecommendations = [];
     let parser = parse({ columns: true, cast: true }, function (err, data) {
       // console.log(data);
-      elapsed_time("Sleep file processed")
+      elapsed_time("Sleep file processed", start);
       resolve(data);
     });
     sleep.pipe(parser);
 
   });
 }
-function elapsed_time(note) {
+function elapsed_time(note, start) {
   var precision = 3; // 3 decimal places
   var elapsed = process.hrtime(start)[1] / 1000000; // divide by a million to get nano to milli
   console.log(process.hrtime(start)[0] + " s, " + elapsed.toFixed(precision) + " ms - " + note); // print message + time
@@ -165,7 +167,7 @@ function getCDCCalorieRequirements() {
     let calorieRecommendations = [];
     let parser = parse({ columns: true, cast: true }, function (err, data) {
       // console.log(data);
-      elapsed_time("Calory file processed")
+      elapsed_time("Calory file processed", start)
       resolve(data);
     });
     calrories.pipe(parser);
@@ -200,8 +202,10 @@ function mapValueWithRecommendation(data, cdcRecoArray, cb, file) {
     return finalRecord;
   });
   let groupedRowsPromises = [];
+  var start = process.hrtime();
   _.chain(result).groupBy('Member_ID').map(function (value, key) {
     let tableId = 'Member_' + key;
+    elapsed_time("grouped rows", start);
     let rowPromise = insertRowsAsStream(tableId, value, cb);
     groupedRowsPromises.push(rowPromise);
   });
