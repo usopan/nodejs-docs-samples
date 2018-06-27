@@ -34,8 +34,10 @@ function getFileStream(file) {
   if (!file.name) {
     throw new Error('Filename not provided. Make sure you have a "name" property in your request');
   }
-
-  return storage.bucket(file.bucket).file(file.name).createReadStream();
+  var start = process.hrtime();
+  let readStream = storage.bucket(file.bucket).file(file.name).createReadStream();
+  elapsed_time("Storage read completed", start);
+  return readStream;
 }
 
 function createTable(tableId) {
