@@ -99,7 +99,11 @@ function insertRowsAsStream(tableId, rows, cb) {
       const bigquery = new BigQuery({
         projectId: projectId,
       });
-
+      let transformedRows = rows.map(row => {
+        row.Height = row.Height.replace(',', '.');
+        row.Date = row.Date.replace('/', '-');
+        return row;
+      })
       // Inserts data into a table
       bigquery
         .dataset(datasetId)
