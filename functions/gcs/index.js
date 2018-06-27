@@ -136,18 +136,69 @@ function insertRowsAsStream(tableId, rows, cb) {
 
 function getCDCSleepRequirements() {
   return new Promise(function (resolve, reject) {
-    var start = process.hrtime();
-    let sleep = storage.bucket('healthapp').file('cdc_sleep_hours_lookup.csv').createReadStream();
-    // let options = {
-    //   input: sleep
-    // };
-    let sleepRecommendations = [];
-    let parser = parse({ columns: true, cast: true }, function (err, data) {
-      // console.log(data);
-      elapsed_time("Sleep file processed", start);
-      resolve(data);
-    });
-    sleep.pipe(parser);
+    resolve([
+      {
+        "Age_Group": "Toddler",
+        "Min_Age": 1,
+        "Max_Age": 2,
+        "Min_Sleep_Hours_Per_Day": 11,
+        "Max_Sleep_Hours_Per_Day": 14
+      },
+      {
+        "Age_Group": "Preschool",
+        "Min_Age": 3,
+        "Max_Age": 5,
+        "Min_Sleep_Hours_Per_Day": 10,
+        "Max_Sleep_Hours_Per_Day": 13
+      },
+      {
+        "Age_Group": "School Age",
+        "Min_Age": 6,
+        "Max_Age": 12,
+        "Min_Sleep_Hours_Per_Day": 9,
+        "Max_Sleep_Hours_Per_Day": 12
+      },
+      {
+        "Age_Group": "Teen",
+        "Min_Age": 13,
+        "Max_Age": 17,
+        "Min_Sleep_Hours_Per_Day": 8,
+        "Max_Sleep_Hours_Per_Day": 10
+      },
+      {
+        "Age_Group": "Young Adult",
+        "Min_Age": 18,
+        "Max_Age": 24,
+        "Min_Sleep_Hours_Per_Day": 7,
+        "Max_Sleep_Hours_Per_Day": 9
+      },
+      {
+        "Age_Group": "Adult",
+        "Min_Age": 25,
+        "Max_Age": 64,
+        "Min_Sleep_Hours_Per_Day": 7,
+        "Max_Sleep_Hours_Per_Day": 9
+      },
+      {
+        "Age_Group": "Older Adult",
+        "Min_Age": 65,
+        "Max_Age": 117,
+        "Min_Sleep_Hours_Per_Day": 7,
+        "Max_Sleep_Hours_Per_Day": 8
+      }
+    ])
+    // var start = process.hrtime();
+    // let sleep = storage.bucket('healthapp').file('cdc_sleep_hours_lookup.csv').createReadStream();
+    // // let options = {
+    // //   input: sleep
+    // // };
+    // let sleepRecommendations = [];
+    // let parser = parse({ columns: true, cast: true }, function (err, data) {
+    //   // console.log(data);
+    //   elapsed_time("Sleep file processed", start);
+    //   resolve(data);
+    // });
+    // sleep.pipe(parser);
 
   });
 }
@@ -159,18 +210,244 @@ function elapsed_time(note, start) {
 }
 function getCDCCalorieRequirements() {
   return new Promise(function (resolve, reject) {
-    var start = process.hrtime();
-    let calrories = storage.bucket('healthapp').file('cdc_calorie_needs_lookup.csv').createReadStream();
-    // let options = {
-    //   input: sleep
-    // };
-    let calorieRecommendations = [];
-    let parser = parse({ columns: true, cast: true }, function (err, data) {
-      // console.log(data);
-      elapsed_time("Calory file processed", start)
-      resolve(data);
-    });
-    calrories.pipe(parser);
+    // var start = process.hrtime();
+    resolve([
+      {
+        "Gender": "M",
+        "Min_Age": 18,
+        "Max_Age": 18,
+        "Sedentary": 2400,
+        "Moderately_Active": 2800,
+        "Active": 3200
+      },
+      {
+        "Gender": "M",
+        "Min_Age": 19,
+        "Max_Age": 20,
+        "Sedentary": 2600,
+        "Moderately_Active": 2800,
+        "Active": 3200
+      },
+      {
+        "Gender": "M",
+        "Min_Age": 21,
+        "Max_Age": 25,
+        "Sedentary": 2400,
+        "Moderately_Active": 2800,
+        "Active": 3000
+      },
+      {
+        "Gender": "M",
+        "Min_Age": 26,
+        "Max_Age": 30,
+        "Sedentary": 2400,
+        "Moderately_Active": 2600,
+        "Active": 3000
+      },
+      {
+        "Gender": "M",
+        "Min_Age": 31,
+        "Max_Age": 35,
+        "Sedentary": 2400,
+        "Moderately_Active": 2600,
+        "Active": 3000
+      },
+      {
+        "Gender": "M",
+        "Min_Age": 36,
+        "Max_Age": 40,
+        "Sedentary": 2400,
+        "Moderately_Active": 2600,
+        "Active": 2800
+      },
+      {
+        "Gender": "M",
+        "Min_Age": 41,
+        "Max_Age": 45,
+        "Sedentary": 2200,
+        "Moderately_Active": 2600,
+        "Active": 2800
+      },
+      {
+        "Gender": "M",
+        "Min_Age": 46,
+        "Max_Age": 50,
+        "Sedentary": 2200,
+        "Moderately_Active": 2400,
+        "Active": 2800
+      },
+      {
+        "Gender": "M",
+        "Min_Age": 51,
+        "Max_Age": 55,
+        "Sedentary": 2200,
+        "Moderately_Active": 2400,
+        "Active": 2800
+      },
+      {
+        "Gender": "M",
+        "Min_Age": 56,
+        "Max_Age": 60,
+        "Sedentary": 2200,
+        "Moderately_Active": 2400,
+        "Active": 2600
+      },
+      {
+        "Gender": "M",
+        "Min_Age": 61,
+        "Max_Age": 65,
+        "Sedentary": 2000,
+        "Moderately_Active": 2400,
+        "Active": 2600
+      },
+      {
+        "Gender": "M",
+        "Min_Age": 66,
+        "Max_Age": 70,
+        "Sedentary": 2000,
+        "Moderately_Active": 2200,
+        "Active": 2600
+      },
+      {
+        "Gender": "M",
+        "Min_Age": 71,
+        "Max_Age": 75,
+        "Sedentary": 2000,
+        "Moderately_Active": 2200,
+        "Active": 2600
+      },
+      {
+        "Gender": "M",
+        "Min_Age": 76,
+        "Max_Age": 117,
+        "Sedentary": 2000,
+        "Moderately_Active": 2200,
+        "Active": 2400
+      },
+      {
+        "Gender": "F",
+        "Min_Age": 18,
+        "Max_Age": 18,
+        "Sedentary": 1800,
+        "Moderately_Active": 2000,
+        "Active": 2400
+      },
+      {
+        "Gender": "F",
+        "Min_Age": 19,
+        "Max_Age": 20,
+        "Sedentary": 2000,
+        "Moderately_Active": 2200,
+        "Active": 2400
+      },
+      {
+        "Gender": "F",
+        "Min_Age": 21,
+        "Max_Age": 25,
+        "Sedentary": 2000,
+        "Moderately_Active": 2200,
+        "Active": 2400
+      },
+      {
+        "Gender": "F",
+        "Min_Age": 26,
+        "Max_Age": 30,
+        "Sedentary": 1800,
+        "Moderately_Active": 2000,
+        "Active": 2400
+      },
+      {
+        "Gender": "F",
+        "Min_Age": 31,
+        "Max_Age": 35,
+        "Sedentary": 1800,
+        "Moderately_Active": 2000,
+        "Active": 2200
+      },
+      {
+        "Gender": "F",
+        "Min_Age": 36,
+        "Max_Age": 40,
+        "Sedentary": 1800,
+        "Moderately_Active": 2000,
+        "Active": 2200
+      },
+      {
+        "Gender": "F",
+        "Min_Age": 41,
+        "Max_Age": 45,
+        "Sedentary": 1800,
+        "Moderately_Active": 2000,
+        "Active": 2200
+      },
+      {
+        "Gender": "F",
+        "Min_Age": 46,
+        "Max_Age": 50,
+        "Sedentary": 1800,
+        "Moderately_Active": 2000,
+        "Active": 2200
+      },
+      {
+        "Gender": "F",
+        "Min_Age": 51,
+        "Max_Age": 55,
+        "Sedentary": 1600,
+        "Moderately_Active": 1800,
+        "Active": 2200
+      },
+      {
+        "Gender": "F",
+        "Min_Age": 56,
+        "Max_Age": 60,
+        "Sedentary": 1600,
+        "Moderately_Active": 1800,
+        "Active": 2200
+      },
+      {
+        "Gender": "F",
+        "Min_Age": 61,
+        "Max_Age": 65,
+        "Sedentary": 1600,
+        "Moderately_Active": 1800,
+        "Active": 2000
+      },
+      {
+        "Gender": "F",
+        "Min_Age": 66,
+        "Max_Age": 70,
+        "Sedentary": 1600,
+        "Moderately_Active": 1800,
+        "Active": 2000
+      },
+      {
+        "Gender": "F",
+        "Min_Age": 71,
+        "Max_Age": 75,
+        "Sedentary": 1600,
+        "Moderately_Active": 1800,
+        "Active": 2000
+      },
+      {
+        "Gender": "F",
+        "Min_Age": 76,
+        "Max_Age": 117,
+        "Sedentary": 1600,
+        "Moderately_Active": 1800,
+        "Active": 2000
+      }
+    ])
+    // let calrories = storage.bucket('healthapp').file('cdc_calorie_needs_lookup.csv').createReadStream();
+    // // let options = {
+    // //   input: sleep
+    // // };
+    // let calorieRecommendations = [];
+    // let parser = parse({ columns: true, cast: true }, function (err, data) {
+    //   // console.log(data);
+    //   elapsed_time("Calory file processed", start)
+    //   resolve(data);
+    // });
+    // calrories.pipe(parser);
   });
 }
 
