@@ -101,7 +101,7 @@ function insertRowsAsStream(tableId, rows, cb) {
       });
       let transformedRows = rows.map(row => {
         row.Height = row.Height.replace(',', '.');
-        row.Date = row.Date.replace('/', '-');
+        row.Date = row.Date.replaceAll('/', '-');
         return row;
       })
       // Inserts data into a table
