@@ -12,9 +12,9 @@
 # limitations under the License.
 
 # [START app_yaml]
-runtime: nodejs
+runtime: nodejs8
 env: standard
-
+service: import
 # [START env]
 env_variables:
   GCLOUD_STORAGE_BUCKET: healthapp
