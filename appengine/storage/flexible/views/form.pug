@@ -5,7 +5,9 @@ html(lang="en")
     meta(charset='utf-8')
     link(rel="stylesheet", href="/static/main.css")
   body
-    label Upload your health data here
+  label(style={color: '#795548', background: '#dedede'}) Welcome to National Health Club Company </br>
+
+    label(style={color: '#f5bcb8', background: '#000000'}) Upload your health data here  . 
     form(method="POST", action="/upload", enctype="multipart/form-data")
       input(type="file", name="file")
       input(type="submit")
