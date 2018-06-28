@@ -13,7 +13,7 @@
 
 # [START app_yaml]
 runtime: nodejs
-env: flex
+env: standard
 
 # [START env]
 env_variables:
