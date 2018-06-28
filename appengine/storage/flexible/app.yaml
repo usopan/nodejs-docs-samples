@@ -23,10 +23,7 @@ resources:
   memory_gb: 1
   disk_size_gb: 10
 automatic_scaling:
-  min_num_instances: 1
-  max_num_instances: 16
-  cool_down_period_sec: 180
-  cpu_utilization:
-    target_utilization: 0.6
+  min_instances: 0
+  max_instances: 16
 # [END env]
 # [END app_yaml]
